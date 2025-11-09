@@ -22,10 +22,26 @@ public class NotaController {
         return notaService.obtenerTodasLasNotas();
     }
 
-    /*@GetMapping("/materia/{idMateria}")
-    public Flux<Nota> obtenerNotasPorEstudiante(@PathVariable Long idEstudiante) {
-        return notaService.obtenerNotasPorEstudiante(idEstudiante);
-    }*/
+    @GetMapping("/materia/{idMateria}/estudiante/{idEstudiante}")
+    public Flux<Nota> obtenerNotasPorMateriaYEstudiante(
+            @PathVariable Long idMateria,
+            @PathVariable Long idEstudiante) {
+        return notaService.findByEstudianteIdAndMateriaId(idEstudiante, idMateria);
+    }
+
+    @GetMapping("/materias/{idMateria}/estudiantes")
+    public Flux<edu.javeriana.reactiva.tallerreactiva.entities.Estudiante> obtenerEstudiantesPorMateria(
+            @PathVariable Long idMateria) {
+        return notaService.obtenerEstudiantesPorMateria(idMateria);
+    }
+
+    @GetMapping("/promedio/materia/{idMateria}/estudiante/{idEstudiante}")
+    public Mono<Double> obtenerPromedio(
+            @PathVariable Long idMateria,
+            @PathVariable Long idEstudiante) {
+        // Calcular promedio ponderado SOLO para la materia y el estudiante indicados
+        return notaService.calcularPromedioPorMateria(idEstudiante, idMateria);
+    }
     @PostMapping
     public Mono<Nota> crearNota(@RequestBody Nota nota) {
         return notaService.registrarNotaEstudianteMateria(nota);
